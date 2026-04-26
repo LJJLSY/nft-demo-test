@@ -117,7 +117,7 @@ async function main() {
     console.log("启动新拍卖...");
     const nftid = 1;
     const startingprice = 1000;
-    const duration = 2;
+    const duration = 3600;
     const tx2 = await auction_seller.start(nftid, nftaddress, startingprice, duration, paymenttoken, {nonce:currentNonce});
     console.log("交易哈希：", tx2.hash);
     await tx2.wait();
