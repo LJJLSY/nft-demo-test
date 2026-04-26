@@ -2,6 +2,14 @@ import hardhatToolboxMochaEthersPlugin from "@nomicfoundation/hardhat-toolbox-mo
 import { configVariable, defineConfig } from "hardhat/config";
 import HardhatIgnitionEthersPlugin from "@nomicfoundation/hardhat-ignition-ethers";
 //import hardhatKeystore from "@nomicfoundation/hardhat-keystore";
+import * as dotenv from "dotenv";
+dotenv.config();
+
+// 获取所有以 PRIVATE_KEY_ 开头的环境变量
+const privateKeys = Object.keys(process.env)
+  .filter(key => key.startsWith('PRIVATE_KEY_') && process.env[key])
+  .sort()  // 确保顺序是 PRIVATE_KEY_1, PRIVATE_KEY_2, ...
+  .map(key => process.env[key] as string);
 
 export default defineConfig({
   plugins: [hardhatToolboxMochaEthersPlugin, HardhatIgnitionEthersPlugin],
@@ -33,6 +41,12 @@ export default defineConfig({
     hardhatOp: {
       type: "edr-simulated",
       chainType: "op",
+    },
+    localhost: {
+      type: "http",
+      url: process.env.RPC_URL || "http://127.0.0.1:8545",
+      //accounts: process.env.PRIVATE_KEY_1 ? [process.env.PRIVATE_KEY_1] : [],
+      accounts: privateKeys,
     },
     sepolia: {
       type: "http",
